@@ -18,7 +18,7 @@ services:
 
   vistashopverse_app:
     build:
-      context: .
+      context: ./projects/vistashopverse
       dockerfile: Dockerfile
     container_name: vistashopverse_app
     ports:
