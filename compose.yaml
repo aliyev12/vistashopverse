@@ -1,8 +1,10 @@
+version: "3.8"
+
 services:
   vistashopverse_db:
     image: postgres:15-alpine
     container_name: vistashopverse_db
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: ${VSV_POSTGRES_DB}
       POSTGRES_USER: ${VSV_POSTGRES_USER}
@@ -12,26 +14,25 @@ services:
     ports:
       - "3003:5432"
     networks:
-      - aa_network
+      - vsv_network
 
   vistashopverse_app:
-    container_name: vistashopverse_app
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: test.Dockerfile
+    container_name: vistashopverse_app
     ports:
       - "3002:3000"
     environment:
       NODE_ENV: production
       DATABASE_URL: ${VSV_DATABASE_URL}
-    restart: unless-stopped
-    networks:
-      - aa_network
     depends_on:
       - vistashopverse_db
+    networks:
+      - vsv_network
 
 networks:
-  aa_network:
+  vsv_network:
     driver: bridge
 
 volumes:
