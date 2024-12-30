@@ -19,7 +19,7 @@ services:
   vistashopverse_app:
     build:
       context: .
-      dockerfile: test.Dockerfile
+      dockerfile: Dockerfile
     container_name: vistashopverse_app
     ports:
       - "3002:3000"
