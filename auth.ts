@@ -92,9 +92,6 @@ export const config = {
       return token;
     },
     authorized({ request, auth }: any) {
-      console.log("###################");
-      console.log(request);
-      console.log("###################");
       // Check for session cart cookie
       if (!request.cookies.get("sessionCartId")) {
         // Generate new session cart id cookie
