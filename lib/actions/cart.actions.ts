@@ -8,6 +8,7 @@ import { prisma } from "@/db/prisma";
 import { cartItemSchema, insertCartSchema } from "../validators";
 import { SHIPPING_DEFAULT, SHIPPING_MIN, TAX } from "../constants";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 // Calculate cart prices
 function calcPrice(items: CartItem[]) {
@@ -53,6 +54,7 @@ export async function addItemToCart(data: CartItem) {
 
     if (!product) throw new Error("Product not found");
 
+    // If cart is empty
     if (!cart) {
       // Create new cart object
       const newCart = insertCartSchema.parse({
@@ -72,10 +74,52 @@ export async function addItemToCart(data: CartItem) {
 
       return {
         success: true,
-        message: "Item added to cart",
+        message: `${product.name} added to cart`,
       };
-    } else {
-      // handle quantity
+    }
+    // If cart is not empty
+    else {
+      // Check if item is already in the cart
+      const existItem = (cart.items as CartItem[]).find(
+        (x) => x.productId === item.productId
+      );
+
+      if (existItem) {
+        // Check stock
+        if (product.stock < existItem.qty + 1) {
+          throw new Error("Not enough stock");
+        }
+
+        // Increase the quantity
+        (cart.items as CartItem[]).find(
+          (x) => x.productId === item.productId
+        )!.qty = existItem.qty + 1;
+      } else {
+        // If item foes not exist in cart
+        // Check stock
+        if (product.stock < 1) throw new Error("Not enough stock");
+
+        // Add item to the cart.items
+        cart.items.push(item);
+      }
+
+      // Save to database
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          items: cart.items as Prisma.CartUpdateitemsInput[],
+          ...calcPrice(cart.items as CartItem[]),
+        },
+      });
+
+      revalidatePath(`/product/${product.slug}`);
+
+      return {
+        success: true,
+        message: `${product.name} ${
+          existItem ? "updated in" : "added to"
+        } cart`,
+      };
     }
   } catch (error) {
     return {
