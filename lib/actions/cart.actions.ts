@@ -2,10 +2,30 @@
 
 import { cookies } from "next/headers";
 import { CartItem } from "@/types";
-import { convertToPlainObject, formatErrors } from "../utils";
+import { convertToPlainObject, formatErrors, round2 } from "../utils";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
-import { cartItemSchema } from "../validators";
+import { cartItemSchema, insertCartSchema } from "../validators";
+import { SHIPPING_DEFAULT, SHIPPING_MIN, TAX } from "../constants";
+import { revalidatePath } from "next/cache";
+
+// Calculate cart prices
+function calcPrice(items: CartItem[]) {
+  const itemsPrice = round2(
+    items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0)
+  );
+  const shippingPrice = round2(
+    itemsPrice > SHIPPING_MIN ? 0 : SHIPPING_DEFAULT
+  );
+  const taxPrice = round2(TAX * itemsPrice);
+  const totalPrice = round2(itemsPrice + taxPrice + shippingPrice);
+  return {
+    itemsPrice: itemsPrice.toFixed(2),
+    shippingPrice: shippingPrice.toFixed(2),
+    taxPrice: taxPrice.toFixed(2),
+    totalPrice: totalPrice.toFixed(2),
+  };
+}
 
 export async function addItemToCart(data: CartItem) {
   try {
@@ -31,18 +51,32 @@ export async function addItemToCart(data: CartItem) {
       where: { id: item.productId },
     });
 
-    // Testing
-    console.log({
-      "Session cart id": sessionCartId,
-      "User ID": userId,
-      "Item requested": item,
-      "Product found": product,
-    });
+    if (!product) throw new Error("Product not found");
 
-    return {
-      success: true,
-      message: "Item added to cart",
-    };
+    if (!cart) {
+      // Create new cart object
+      const newCart = insertCartSchema.parse({
+        userId: userId,
+        items: [item],
+        sessionCartId: sessionCartId,
+        ...calcPrice([item]),
+      });
+
+      // Add to database
+      await prisma.cart.create({
+        data: newCart,
+      });
+
+      // Revalidate product page
+      revalidatePath(`/product/${product.slug}`);
+
+      return {
+        success: true,
+        message: "Item added to cart",
+      };
+    } else {
+      // handle quantity
+    }
   } catch (error) {
     return {
       success: false,
