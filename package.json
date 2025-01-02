@@ -9,8 +9,10 @@
     "lint": "next lint",
     "seed": "node prisma/seed.js",
     "postinstall": "prisma generate",
+    "shadcn:add": "npx shadcn@latest add",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev --name"
+    "prisma:migrate": "npx prisma migrate dev --name",
+    "prisma:studio": "npx prisma studio"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
@@ -20,6 +22,7 @@
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-toast": "^1.2.4",
     "bcrypt-ts-edge": "^3.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
