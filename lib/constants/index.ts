@@ -8,6 +8,19 @@ export const LATEST_PRODUCTS_LIMIT =
 export const TAX = Number(process.env.NEXT_TAX) || 0.15;
 
 /**
+ * List of payment methods.
+ */
+export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
+  ? process.env.PAYMENT_METHODS.split(", ")
+  : ["PayPal", "Stripe", "CashOnDelivery"];
+
+/**
+ * Default payment method.
+ */
+export const DEFAULT_PAYMENT_METHOD =
+  process.env.DEFAULT_PAYMENT_METHOD || "PayPal";
+
+/**
  * Minimum purchase amount to get free shipping.
  * @default 100
  */
