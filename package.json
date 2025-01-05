@@ -12,7 +12,8 @@
     "shadcn:add": "npx shadcn@latest add",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev --name",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "prisma:seed": "npx tsx ./db/seed.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.4",
