@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { updateProfile } from "@/lib/actions/user.actions";
+import { SessionProvider } from "next-auth/react";
 
 const ProfileForm = () => {
   const { data: session, update } = useSession();
@@ -28,8 +30,31 @@ const ProfileForm = () => {
 
   const { toast } = useToast();
 
-  const onSubmit = () => {
-    return;
+  const onSubmit = async (values: z.infer<typeof updateProfileSchema>) => {
+    const res = await updateProfile(values);
+
+    if (!res.success) {
+      return toast({
+        variant: "destructive",
+        description: res.message,
+      });
+    }
+
+    const newSession = {
+      ...session,
+      user: {
+        ...session?.user,
+        name: values.name,
+      },
+    };
+
+    console.log("newSession = ", newSession);
+
+    await update(newSession);
+
+    toast({
+      description: res.message,
+    });
   };
 
   return (
