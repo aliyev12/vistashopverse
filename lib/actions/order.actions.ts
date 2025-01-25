@@ -398,7 +398,7 @@ export async function updateOrderToPaidCOD(orderId: string) {
   }
 }
 
-// Update COD order to delivered
+// Update Cash on Delivery (COD) order to delivered
 export async function deliverOrder(orderId: string) {
   try {
     const order = await prisma.order.findFirst({
