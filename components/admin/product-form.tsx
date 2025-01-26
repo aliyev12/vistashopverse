@@ -6,7 +6,7 @@ import { insertProductSchema, updateProductSchema } from "@/lib/validators";
 import { Product } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ControllerRenderProps, useForm } from "react-hook-form";
+import { ControllerRenderProps, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   Form,
@@ -20,6 +20,7 @@ import slugify from "slugify";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 
 const ProductForm = ({
   type,
@@ -44,6 +45,51 @@ const ProductForm = ({
 
   const generateSlug = () => {
     form.setValue("slug", slugify(form.getValues("name"), { lower: true }));
+  };
+
+  const onSubmit: SubmitHandler<z.infer<typeof insertProductSchema>> = async (
+    values
+  ) => {
+    // On Create
+    if (type === "Create") {
+      const res = await createProduct(values);
+
+      if (!res.success) {
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+      } else {
+        toast({
+          description: res.message,
+        });
+      }
+
+      router.push(`/admin/products`);
+    }
+
+    // On Update
+    if (type === "Update") {
+      if (!productId) {
+        router.push(`/admin/products`);
+        return;
+      }
+
+      const res = await updateProduct({ ...values, id: productId });
+
+      if (!res.success) {
+        toast({
+          variant: "destructive",
+          description: res.message,
+        });
+      } else {
+        toast({
+          description: res.message,
+        });
+      }
+
+      router.push(`/admin/products`);
+    }
   };
 
   type TNameField = {
@@ -76,7 +122,11 @@ const ProductForm = ({
 
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form
+        method="POST"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8"
+      >
         <div className="flex flex-col md:flex-row gap-5">
           {/* Name */}
           <FormField
