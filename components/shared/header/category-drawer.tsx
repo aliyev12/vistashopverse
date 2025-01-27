@@ -8,7 +8,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { getAllCategories } from "@/lib/actions/product.actions";
-import { MenuIcon } from "lucide-react";
+import { UnfoldHorizontal } from "lucide-react";
 import Link from "next/link";
 
 const CategoryDrawer = async () => {
@@ -18,7 +18,7 @@ const CategoryDrawer = async () => {
     <Drawer direction="left">
       <DrawerTrigger asChild>
         <Button variant="outline">
-          <MenuIcon />
+          <UnfoldHorizontal />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="h-full max-w-sm">
