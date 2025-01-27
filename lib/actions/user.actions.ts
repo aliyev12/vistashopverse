@@ -234,7 +234,7 @@ export async function updateUser(user: z.infer<typeof updateUserSchema>) {
     revalidatePath("/admin/users");
 
     return {
-      success: false,
+      success: true,
       message: `User "${user.email}" updated successfully`,
     };
   } catch (error) {
