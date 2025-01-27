@@ -89,6 +89,18 @@ export async function getAllProducts({
         }
       : {};
 
+  let orderBy: Prisma.ProductOrderByWithRelationInput;
+
+  if (sort === "lowest") {
+    orderBy = { price: "asc" };
+  } else if (sort === "highest") {
+    orderBy = { price: "desc" };
+  } else if (sort === "rating") {
+    orderBy = { rating: "desc" };
+  } else {
+    orderBy = { createdAt: "desc" };
+  }
+
   const data = await prisma.product.findMany({
     where: {
       ...queryFilter,
@@ -98,7 +110,7 @@ export async function getAllProducts({
     },
     skip: (page - 1) * limit,
     take: limit,
-    orderBy: { createdAt: "desc" },
+    orderBy,
   });
 
   const dataCount = await prisma.product.count();
