@@ -25,6 +25,7 @@ import { UploadButton } from "@/lib/uploadthing";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import { Checkbox } from "../ui/checkbox";
+import { X } from "lucide-react";
 
 const ProductForm = ({
   type,
@@ -99,6 +100,13 @@ const ProductForm = ({
   const images = form.watch("images");
   const isFeatured = form.watch("isFeatured");
   const banner = form.watch("banner");
+
+  const handleRemoveImage = (index: number) => {
+    form.setValue(
+      "images",
+      images.filter((_, i) => i !== index)
+    );
+  };
 
   type TNameField = {
     field: ControllerRenderProps<z.infer<typeof insertProductSchema>, "name">;
@@ -245,15 +253,24 @@ const ProductForm = ({
                 <Card>
                   <CardContent className="space-y-2 mt-2 min-h-48">
                     <div className="flex-start space-x-2">
-                      {images.map((image: string) => (
-                        <Image
-                          key={image}
-                          src={image}
-                          alt="Product image"
-                          className="w-20 h-20 object-cover object-center rounded-sm"
-                          width={100}
-                          height={100}
-                        />
+                      {images.map((image: string, i: number) => (
+                        <div key={image} className="relative">
+                          <Image
+                            src={image}
+                            alt="Product image"
+                            className="w-20 h-20 object-cover object-center rounded-sm"
+                            width={100}
+                            height={100}
+                          />
+                          {/* background transparent 50% */}
+                          <button
+                            type="button"
+                            className="absolute top-0 right-0 bg-gray-100 hover:bg-gray-200 p-1 rounded-full"
+                            onClick={() => handleRemoveImage(i)}
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
                       ))}
                       <FormControl>
                         <UploadButton
@@ -298,13 +315,24 @@ const ProductForm = ({
                 )}
               />
               {isFeatured && banner && (
-                <Image
-                  src={banner}
-                  alt="Banner image"
-                  className="w-full object-cover object-center rounded-sm"
-                  width={1920}
-                  height={680}
-                />
+                <div className="relative">
+                  <Image
+                    src={banner}
+                    alt="Banner image"
+                    className="w-full object-cover object-center rounded-sm"
+                    width={1920}
+                    height={680}
+                  />
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 p-1 rounded-full"
+                    onClick={() => {
+                      form.setValue("banner", "");
+                    }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               )}
 
               {isFeatured && !banner && (
