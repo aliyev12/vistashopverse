@@ -1,1 +1,1 @@
-git commit -m "Create server action that review dialog form will submit to"
+git commit -m "Connect review server action with the review UI form"
