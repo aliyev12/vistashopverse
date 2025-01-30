@@ -1,1 +1,1 @@
-git commit -m "Get the reviews and display the on the product/slug page"
+git commit -m "Add ability to edit an existing review"
