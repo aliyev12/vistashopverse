@@ -1,1 +1,2 @@
-git commit -m "Connect review server action with the review UI form"
+git commit -m "Create a server action to get all of the reviews for a product and include name of the user who left review"
+git commit -m "Get the reviews and display the on the product/slug page"
