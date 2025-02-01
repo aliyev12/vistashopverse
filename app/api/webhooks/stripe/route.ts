@@ -3,6 +3,13 @@ import Stripe from "stripe";
 import { updateOrderToPaid } from "@/lib/actions/order.actions";
 
 export async function POST(req: NextRequest) {
+  console.log("####################################################");
+  console.log("####################################################");
+  console.log("####################################################");
+  console.log("STRIPE WEBHOOK req = ", req);
+  console.log("####################################################");
+  console.log("####################################################");
+  console.log("####################################################");
   const requestBody = await req.text();
   const stripeSignatureHeader = req.headers.get("stripe-signature") as string;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
