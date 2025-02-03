@@ -41,7 +41,7 @@ const ModeToggle = () => {
           variant="ghost"
           className="focus-visible:ring-0 focus-visible:ring-offset-0"
         >
-          {getIcon()}
+          {getIcon()} <span className="flex md:hidden">Mode</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

@@ -9,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserIcon } from "lucide-react";
+import { User, UserIcon } from "lucide-react";
 
 const UserButton = async () => {
   const session = await auth();
@@ -30,13 +30,27 @@ const UserButton = async () => {
     <div className="flex gap-2 items-center">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <div className="flex items-center">
-            <Button
+          <div>
+            <div className="hidden md:flex items-center">
+              <Button
+                variant="ghost"
+                className="relative w-8 h-8 rounded-full ml-2 flex items-center ustify-center bg-gray-200"
+              >
+                {firstInitial}
+              </Button>
+            </div>
+            <div className="flex md:hidden items-center">
+              <Button variant="ghost">
+                <User /> Account
+              </Button>
+
+              {/* <Button
               variant="ghost"
               className="relative w-8 h-8 rounded-full ml-2 flex items-center ustify-center bg-gray-200"
             >
               {firstInitial}
-            </Button>
+            </Button> */}
+            </div>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
