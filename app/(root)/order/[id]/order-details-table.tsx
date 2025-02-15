@@ -220,9 +220,9 @@ const OrderDetailsTable = ({
           )}
 
           {/* Cash on Delivery (COD) */}
-          {isAdmin && !isPaid && paymentMethod === "CashOnDelivery" && (
+          {/* {isAdmin && !isPaid && paymentMethod === "CashOnDelivery" && (
             <MarkAsPaidButton />
-          )}
+          )} */}
           {isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
         </OrderSummary>
       </div>

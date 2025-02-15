@@ -119,12 +119,14 @@ const DealCountdown = () => {
           </Button>
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="md:ml-6 mt-10 md:mt-0 flex justify-center">
         <Image
-          src="/images/promo.jpg"
+          src="https://tp53jcomcm.ufs.sh/f/BBwHz0iEvTOHzdMnV6hQYHLWRyns6hBSi2aGZeuwx4gI3CTO"
           alt="promotion"
-          width={300}
-          height={200}
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="w-full h-auto object-cover object-center rounded-lg shadow-md border"
         />
       </div>
     </section>

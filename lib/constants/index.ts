@@ -12,7 +12,7 @@ export const TAX = Number(process.env.NEXT_TAX) || 0.15;
  */
 export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
   ? process.env.PAYMENT_METHODS.split(", ")
-  : ["PayPal", "Stripe", "CashOnDelivery"];
+  : ["PayPal", "Stripe"];
 
 /**
  * Default payment method.

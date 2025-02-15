@@ -7,15 +7,17 @@ import Rating from "./rating";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm flex flex-col">
       <CardHeader className="p-0 items-center">
         <Link href={`/product/${product.slug}`}>
           <Image
             src={product.images[0]}
             alt={product.name}
-            height={300}
-            width={300}
+            height={0}
+            width={0}
+            sizes="100vw"
             priority={true}
+            className="w-full h-48 object-cover object-center rounded-t-lg shadow-md"
           />
         </Link>
       </CardHeader>
